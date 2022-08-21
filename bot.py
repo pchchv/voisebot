@@ -1,5 +1,6 @@
 import os
 import logging
+from gtts import gTTS # Google voice recognition engine
 from dotenv import load_dotenv
 from aiogram import Bot, Dispatcher, executor, types
 
@@ -19,9 +20,20 @@ async def send_welcome(message: types.Message):
     """
     This handler will be called when user sends `/start` or '/help' command
     """
-    greeting = ''  # TODO: Write a greeting message
+    greeting = ' 0 '  # TODO: Write a greeting message
     await message.reply(greeting)
 
+
+@dp.message_handler(content_types=['text'])
+async def send_audio(message: types.Message):
+    """
+    This handler get user text message and return audio message
+    """
+    text = message.text
+    if len(text) > 40: # If text is too long, we decline the text
+        text = "Слишком длинный текст, я пока слабый Интеллект. Приношу свои извинения."
+    tts = gTTS(text=text, lang='ru') # text recognition to mp3
+    tts.save('message.mp3')
 
 if __name__ == '__main__':
     executor.start_polling(dp, skip_updates=True)
