@@ -38,6 +38,8 @@ async def send_audio(message: types.Message):
     audio = open('message.mp3', 'rb')
     audio = AudioSegment.from_file('message.mp3', 'mp3')
     audio.export("message.ogg", format='mp3') # mp3 to ogg
+    voice = open('message.ogg', 'rb') # creating voice message
+    await message.reply_voice(voice)
 
 if __name__ == '__main__':
     executor.start_polling(dp, skip_updates=True)
