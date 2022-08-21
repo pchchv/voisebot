@@ -2,6 +2,7 @@ import os
 import logging
 from gtts import gTTS # Google voice recognition engine
 from dotenv import load_dotenv
+from pydub import AudioSegment
 from aiogram import Bot, Dispatcher, executor, types
 
 load_dotenv()
@@ -34,6 +35,9 @@ async def send_audio(message: types.Message):
         text = "Слишком длинный текст, я пока слабый Интеллект. Приношу свои извинения."
     tts = gTTS(text=text, lang='ru') # text recognition to mp3
     tts.save('message.mp3')
+    audio = open('message.mp3', 'rb')
+    audio = AudioSegment.from_file('message.mp3', 'mp3')
+    audio.export("message.ogg", format='mp3') # mp3 to ogg
 
 if __name__ == '__main__':
     executor.start_polling(dp, skip_updates=True)
